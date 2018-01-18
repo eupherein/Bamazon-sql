@@ -1,14 +1,25 @@
-DROP DATABASE IF EXISTS bamazon_DB;
-CREATE DATABASE bamazon_DB;
+DROP DATABASE IF EXISTS greatBay_DB;
+CREATE DATABASE bamazon_db;
 
-USE bamazon_DB;
+USE bamazon_db;
 
-CREATE TABLE auctions(
-  id INT NOT NULL AUTO_INCREMENT,
-  item_name VARCHAR(100) NOT NULL,
-  category VARCHAR(45) NOT NULL,
-  starting_bid INT default 0,
-  highest_bid INT default 0,
-  PRIMARY KEY (id)
+CREATE TABLE items(
+	id INTEGER (11) AUTO_INCREMENT NOT NULL,
+	Name VARCHAR (45) NOT NULL, 
+	Department VARCHAR (45) NOT NULL, 
+	Price INTEGER (11) NOT NULL, 
+	In_Stock INTEGER (11) NOT NULL,
+	PRIMARY KEY (id)
+
 );
 
+INSERT INTO items (Name, Department, Price, In_Stock)
+VALUES ("shoe", "clothing", 2, 5);
+INSERT INTO items (Name, Department, Price, In_Stock)
+VALUES ("shirt", "clothing", 12, 7);
+INSERT INTO items (Name, Department, Price, In_Stock)
+VALUES ("sock", "clothing", 2, 19);
+INSERT INTO items (Name, Department, Price, In_Stock)
+VALUES ("foot", "parts", 199, 2);
+INSERT INTO items (Name, Department, Price, In_Stock)
+VALUES ("pant", "clothing", 4, 37);
