@@ -50,7 +50,22 @@ function whichItem() {
                 message: "How many?"
             }
         ])
-}
+        //links database information to store options
+        .then(function (res) {
+            var itemID = response.action;
+            var userChoice = response.answer;
+
+            connection.query("SELECT id, Name, Department, Price, In_Stock FROM items WHERE ?", { id: itemID }, function (err, res) {
+                var stock = res[0].In_Stock;
+                if (userChoice < stock) {
+                    var update = res[0].In_Stock - userChoice;
+                    connection.query("UPDATE items SET ? WHERE ?",
+                    )
+                }
+            })
+        })
+
+};
 
 
 
