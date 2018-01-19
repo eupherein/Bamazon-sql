@@ -1,6 +1,7 @@
 var mysql = require('mysql');
 var inquirer = require('inquirer');
 var colors = require('colors');
+require('console.table');
 
 //mysql connection
 
@@ -21,69 +22,70 @@ var connection = mysql.createConnection({
 connection.connect(function (err) {
     if (err) throw err;
     //run start function after connection has been established
-    start();
+    stockList();
 });
 
-// //function for showing stock list
-// function stockList() {
-//     var sql = "SELECT * FROM items";
-//     connection.query(sql, (err, res) => {
-//         if (err) throw err;
-//         console.table(res);
-//         whichItem();
-//     });
-// };
-// stockList();
+//function for showing stock list
+function stockList() {
+    connection.query("SELECT * FROM items", function (err, res) {
+        if (err) throw err;
+        console.table(res);
+        whichItem();
+    });
+};
+//stockList();
 
-// //promt user for action onto database
-// function whichItem() {
-//     inquirer
-//         .prompt([
-//             {
-//                 name: 'action',
-//                 type: 'input',
-//                 message: "Purchase item by ID number"
-//             },
-//             {
-//                 name: 'answer',
-//                 type: 'input',
-//                 message: "How many?"
-//             }
-//         ])
+//promt user for action onto database
+function whichItem() {
+    inquirer
+        .prompt([
+            {
+                name: 'item',
+                type: 'input',
+                message: "Purchase item by ID number"
+            },
+            {
+                name: 'answer',
+                type: 'input',
+                message: "How many?"
+            }
+        ])
 
-//         //links database information to store options
-//         .then(function (res) {
-//             var itemID = response.action;
-//             var userChoice = response.answer;
+        //links database information to store options
+        .then(function (response) {
+            var itemID = response.item;
+            var userChoice = response.answer;
 
-//             //updates stock ticker based on user buy amount 
-//             connection.query("SELECT id, Name, Department, Price, In_Stock FROM items WHERE ?", { id: itemID }, function (err, res) {
-//                 var stock = res[0].In_Stock;
-//                 // if (userchoice > stock) {
-//                 //     console.log("amount specified is not in stock, please try again")
-//                // } else 
-//                 if (userChoice < stock) {
-//                     var update = res[0].In_Stock - userChoice;
-//                     connection.query("UPDATE items SET ? WHERE ?",
-//                         [{
-//                             //add user choice to database
-//                             In_Stock: update
-//                         },
-//                         {
-//                             //for itemID that user selected to be affected
-//                             id: itemID
-//                         }]
-//                     );
-//                 };
+            //updates stock ticker based on user buy amount 
+            connection.query("SELECT id, Name, Department, Price, In_Stock FROM items WHERE ?", { id: itemID }, function (err, res) {
+                var stock = res[0].In_Stock;
+                // if (userchoice > stock) {
+                //     console.log("amount specified is not in stock, please try again")
+               // } else 
+                if (userChoice < stock) {
+                    var update = res[0].In_Stock - userChoice;
+                    connection.query("UPDATE items SET ? WHERE ?",
+                        [{
+                            //add user choice to database
+                            In_Stock: update
+                        },
+                        {
+                            //for itemID that user selected to be affected
+                            id: itemID
+                        }]
+                    );
+                    console.log("You bought it");
+                    stockList();       
+                };
 
-//                 //if the stock is 0 then "display out of stock"
-//                 if (res[0].In_Stock <= 0) {
-//                     console.log("Out of stock")
-//                 };
-//             });
-//         });
+                //if the stock is 0 then "display out of stock"
+                if (res[0].In_Stock <= 0) {
+                    console.log("Out of stock")
+                };
+            });
+        });
 
-// };
+};
 
 
 
